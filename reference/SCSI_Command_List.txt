@@ -1,0 +1,3196 @@
+============================================
+
+PC-FXGA authoring software
+
+GMAKER Starter Kit Plus (Ver.1.1)
+
+SCSI command explanation
+
+NEC Home Electronics Corporation
+
+July 30, 1996
+
+============================================
+
+Table of Contents
+-----------------
+
+Chapter 1 - SCSI Commands
+-------------------------
+  1-1   List of commands
+  1-2   TEST UNIT READY command
+  1-3   REZERO UNIT command
+  1-4   REQUEST SENSE command
+  1-5   READ (6) command
+  1-6   SEEK (6) command
+  1-7   NO OPERATION command
+  1-8   INQUIRY command
+  1-9   MODE SELECT command
+  1-10  RESERVE command
+  1-11  RELEASE command
+  1-12  MODE SENSE command
+  1-13  START/STOP UNIT command
+  1-14  SEND DIAGNOSTIC command
+  1-15  PREVENT/ALLOW MEDIUM REMOVAL command
+  1-16  READ CD-ROM CAPACITY command
+  1-17  READ EXTENDED (10) command
+  1-18  SEEK EXTENDED (10) command
+  1-19  VERIFY command
+  1-20  READ SUB-CHANNEL command
+  1-21  READ TOC command
+  1-22  READ HEADER command
+  1-23  PLAY AUDIO MSF command
+  1-24  PLAY AUDIO TRACK INDEX command
+  1-25  PLAY AUDIO TRACK RELATIVE command
+  1-26  PAUSE/RESUME command
+  1-27  READ (12) command
+  1-28  PLAY AUDIO TRACK RELATIVE (12) command
+  1-29  VERIFY (12) command
+  1-30  AUDIO SCAN command
+  1-31  AUDIO TRACK SEARCH command
+  1-32  PLAY command
+  1-33  STILL command
+  1-34  SET STOP-TIME command
+  1-35  EJECT command
+  1-36  READ SUBCODE-Q command
+  1-37  READ TOC command
+
+Chapter 2 - Subchannel Data List
+--------------------------------
+  2-1  SUB-Q Channel Data (Data Format 00h)
+  2-2  CD-ROM Current Position Data (Data Format 01h)
+  2-3  Media Catalog Number Data (Data Format 02h)
+  2-4  ISRC Data (Data Format 03h)
+
+
+Chapter 3 - Parameter list (SCSI-2 compliant)
+---------------------------------------------
+  3-1  Mode select data header
+  3-2  Mode sense data header
+  3-3  Block descriptor
+  3-4  Page 29H (Buffer usage parameters)
+  3-5  Page 2AH (Error count parameters)
+  3-6  Page 2BH (Pitch control parameters)
+  3-7  Page 0EH (Audio control parameters)
+
+
+Chapter 4 - Vendor Unique Parameter List
+----------------------------------------
+
+
+Chapter 5 - Sense Data List
+---------------------------
+  5-1  Sense Data
+  5-2  Table 1 SENSE KEY
+  5-3  Table 2 SUB ERROR CLASS/CODE
+
+
+============================================
+
+Chapter 1 - SCSI Commands
+-------------------------
+
+* 1-1  Command List:
+--------------------
+
++------+----------------------+
+| Code |  Command             |
++------+----------------------+
+| 00   | TEST UNIT READY      |
++------+----------------------+
+| 01   | REZERO UNIT          |
++------+----------------------+
+| 03   | REQUEST SENSE        |
++------+----------------------+
+| 08   | READ(6)              |
++------+----------------------+
+| 0B   | SEEK(6)              |
++------+----------------------+
+| 0D   | NO OPERATION         |
++------+----------------------+
+| 12   | INQUIRY              |
++------+----------------------+
+| 15   | MODE SELECT          |
++------+----------------------+
+| 16   | RESERVE              |
++------+----------------------+
+| 17   | RELEASE              |
++------+----------------------+
+| 1A   | MODE SENSE           |
++------+----------------------+
+| 1B   | START/STOP UNIT      |
++------+----------------------+
+| 1D   | SEND DIAGNOSTIC      |
++------+----------------------+
+| 1E   | PREVENT/ALLOW        |
+|      | MEDIUM REMOVAL       |
++------+----------------------+
+| 25   | READ CD-ROM          |
+|      | CAPACITY             |
++------+----------------------+
+| 28   | READ EXTENDED(10)    |
++------+----------------------+
+| 2B   | SEEK EXTENDED(10)    |
++------+----------------------+
+| 2F   | VERIFY               |
++------+----------------------+
+| 42   | READ SUB-CHANNEL     |
++------+----------------------+
+| 43   | READ TOC             |
++------+----------------------+
+| 44   | READ HEADER          |
++------+----------------------+
+| 47   | PLAY AUDIO MSF       |
++------+----------------------+
+| 48   | PLAY AUDIO           |
+|      | TRACK INDEX          |
++------+----------------------+
+| 49   | PLAY AUDIO TRACK     |
+|      | RELATIVE             |
++------+----------------------+
+| 4B   | PAUSE/RESUME         |
++------+----------------------+
+| A8   | READ(12)             |
++------+----------------------+
+| A9   | PLAY AUDIO TRACK     |
+|      | RELATIVE(12)         |
++------+----------------------+
+| AF   | VERIFY(12)           |
++------+----------------------+
+| D2   | AUDIO SCAN           |
++------+----------------------+
+| D8   | AUDIO TRACK SEARCH   |
++------+----------------------+
+| D9   | PLAY                 |
++------+----------------------+
+| DA   | STILL                |
++------+----------------------+
+| DB   | SET STOP-TIME        |
++------+----------------------+
+| DC   | EJECT                |
++------+----------------------+
+| DD   | READ SUBCODE-Q       |
++------+----------------------+
+| DE   | READ TOC             |
++------+----------------------+
+
+
+* 1-2   TEST UNIT READY command
+-------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Checks whether the device is in a READY state.
+
+If the device is in an EJECT state or not, or if the device is powered on or
+reset, or if no CD is inserted, the device will return the "CHECK CONDITION"
+status.
+
+
+* 1-3   REZERO UNIT command
+---------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     0     0     0     0     0     1  | |  01  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+The laser is turned off, the disc motor is stopped, and the pickup is moved
+to the starting position.
+
+
+* 1-4   REQUEST SENSE command
+-----------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     0     0     0     0     1     1  | |  03  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |              SENSE  DATA  LENGTH              | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+The sense data for the "CHECK CONDITION" status returned for the executed
+command is transferred to the initiator.
+
+When any command other than "NO OPERATION" is executed, including this
+command, the sense data is cleared.
+
+Sense data length = 00     First 4 bytes of sense data
+                 >= 12H    12H (18) bytes
+
+Otherwise, the specified length of sense data is transferred.
+For details on sense data, see "Sense Data List".
+
+
+* 1-5   READ (6) command
+------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     0     0     1     0     0     0  | |  08  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0  | Logical Block Address (MSB) | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |          Logical Block Address                | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |          Logical Block Address (LSB)          | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |          Number of transfer blocks            | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+The specified number of transfer blocks (8 bits) of data, starting from the
+block specified by the logical block address (21 bits), is transferred to the
+initiator.
+
+If the number of transfer blocks is 0, 256 blocks are transferred.
+
+The data format to be transferred, the processing to be performed when an
+error occurs, etc. are specified by the "MODE SELECT" command issued before
+issuing this command.
+
+The "MODE SELECT" value is reset to the initial value when the power is
+turned on or the SCSI bus is reset.
+
+
+* 1-6   SEEK (6) command
+------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     0     0     1     0     1     1  | |  0B  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0  | Logical Block Address (MSB) | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |          Logical Block Address                | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |          Logical Block Address (LSB)          | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Executes a SEEK operation to the block specified by the logical block address.
+After the SEEK operation is completed, a status report is sent.
+
+
+* 1-7   NO OPERATION command
+----------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     0     0     1     1     0     1  | |  0D  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+It does nothing and does not change the operating state of the CD-ROM drive.
+
+
+* 1-8   INQUIRY command
+-----------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     0     1     0     0     1     0  | |  12  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |       LUN       |  0     0     0     0     0  | |      |
+|    | (Logical Unit)  |                             | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |             INQUIRY  DATA  LENGTH             | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+The following INQUIRY DATA, which indicates the attributes of the CD-ROM
+drive, is transferred to the initiator only for the specified number of
+bytes. However, even if the specified number of bytes is 36 bytes or more,
+only 36 bytes are transferred.
+
+    INQUIRY DATA
+
+      DB  05H, 80H, 02H, 00H, 1FH
+      DB  00H, 00H, 00H
+      DB  'NEC*****'
+      DB  'CD-ROM*DRIVE:FX*'
+
+      DB  '1.0' ('1.0E')
+           ***    ****
+
+    * - varies depending on the model.
+
+If the LUN is not 000, the first data in the INQUIRY DATA, 05H, will become
+7FH, and the data after that will be undefined.
+
+Notes:
+------
+For PC-FX boards and PC-FXGA, an 'E' will be added to the end, as shown
+above in parentheses.
+
+
+* 1-9   MODE SELECT command
+---------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     0     1     0     1     0     1  | |  15  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0  | PF  |  0     0     0     0  | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |            PARAMETER  LIST  LENGTH            | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Sets the individual modes in the CD-ROM.
+
+If the PF bit is 0, it is a vendor-unique specification.
+
+If the PF bit is 1, it is considered to be compliant with the SCSI-2
+specification and supports the following functions.
+
+(1) Support for READ in all data modes and data lengths
+(2) How to use the read-ahead ring buffer
+
+For the contents of each parameter list, see "Parameter List (SCSI-2
+Compliant)" and "Vendor Unique Parameter List" list.
+
+
+* 1-10  RESERVE command
+-----------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     0     1     0     1     1     0  | |  16  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+The initiator reserves the CD-ROM drive for exclusive use.
+The reservation is released only in the following cases:
+
+(1) When a "RELEASE" command is issued by the initiator that issued the
+"RESERVE" command.
+(2) When a "BUS DEVICE RESET" message is received from any initiator.
+(3) When the power is cycled or a RESET condition is detected.
+
+*The initiator's ID bit must also be set in the selection phase to identify
+the initiator's ID.
+
+
+* 1-11  RELEASE command
+-----------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     0     1     0     1     1     1  | |  17  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Releases the reserved state of the CD-ROM drive.
+
+*To identify the initiator ID, the initiator ID bit must also be set during
+the selection phase.
+
+
+* 1-12  MODE SENSE command
+--------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     0     1     1     0     1     0  | |  1A  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0  | DBD |  0     0     0  | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |     PC    |             PAGE CODE             | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |                  DATA  LENGTH                 | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Transfers each mode in the CD-ROM to the initiator.
+If DBD, PC, and page code are all 0, the specifications in the vendor unique
+parameter list will be followed.
+Otherwise, it will be considered to conform to the SCSI-2 specifications and
+is supported as follows:
+
+   DBD:  If 1, the 8-byte block descriptor is not transferred.
+
+    PC:  00B = Current
+         01B = Changeable
+         10B = Default
+         11B = Unused (Saved)
+
+For information on page codes and their formats, please refer to the
+"Parameter List (SCSI-2 Compliant)" and "Vendor Unique Parameter List".
+
+
+* 1-13  START/STOP UNIT command
+-------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     0     1     1     0     1     1  | |  1B  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0  |Immed| |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  0     0     0     0     0     0  |Lo/Ej|Start| |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Puts the drive in SET-UP or STOP state.
+
+    IMMED:  0 = Status is returned after command execution is completed.
+            1 = Status is returned when the command is issued.
+    START:  0 = Puts the drive in STOP state.
+            1 = Puts the drive in SET-UP state.
+
+Lo/Ej is 0/1 and indicates whether Load/Eject is enabled or disabled.
++-------+-------+----------------------------------------------+
+| Lo/Ej | Start |                                              |
++-------+-------+----------------------------------------------+
+|   0   |   0   | Stop                                         |
++-------+-------+----------------------------------------------+
+|   0   |   1   | Start                                        |
++-------+-------+----------------------------------------------+
+|   1   |   0   | STOP & EJECT - + For a Top-loading case,     |
++-------+-------+                | Error status report         |
+|   1   |   0   | LOAD & START - +                             |
++-------+-------+----------------------------------------------+
+
+Notes:
+------
+With the PC-FX board and PC-FXGA, if you issue Lo/Ej=0 and START=0 while
+playback is stopped, the "CHECK CONDITION" status will be returned.
+
+
+* 1-14  SEND DIAGNOSTIC command
+-------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     0     1     1     1     0     1  | |  1D  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0  | SELF|  0     0  | |  04  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Performs test operations on the CD-ROM drive.
+
+    SELF:  1 = Runs a predefined series of tests in the CD-ROM drive.
+           0 = Disabled. 
+
+
+* 1-15  PREVENT/ALLOW MEDIUM REMOVAL command
+--------------------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     0     1     1     1     1     0  | |  1E  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  0     0     0     0     0     0     0  |Pre- | |      |
+|    |                                         |vent | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Sets whether to enable or disable the EJECT key on the CD-ROM drive.
+
+    PREVENT:  0 = EJECT is possible with either the EJECT key or the "EJECT"
+                  command.  (Default setting)
+              1 = The EJECT key is disabled and ejection is possible only with
+                  the "EJECT" command.
+
+However, if the power is cycled, a RESET condition is detected, or a "BUS
+DEVICE RESET" message is received, the default setting will be restored.
+
+Drives without an EJECT function will return a "CHECK CONDITION" status.
+
+
+* 1-16  READ CD-ROM CAPACITY command
+------------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     1     0     0     1     0     1  | |  25  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |           Logical Block Address (MSB)         | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |           Logical Block Address               | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |           Logical Block Address               | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |           Logical Block Address (LSB)         | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |  0     0     0     0     0     0     0  | PMI | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Transfers information about the capacity of the CD disc to the initiator.
+
+    PMI:   0 = Returns the logical block address of the lead-out area - 1, or
+               the last logical address accessible on the medium that is equal
+               to or greater than the address of the last block that can be
+               read or played (however, the difference must be 75 sectors or
+               less).
+           1 = Returns the last address of data after the specified logical
+               block address, or the last playable address.
+
+The data returned is 4 bytes of logical block address + 4 bytes of block
+length, as follows.
+The block length indicates the logical block length set by the most recent
+MODE SELECT command.
+
+    +---------------------------------+
+    |+0   Logical block address (MSB) |
+    |+1   Logical block address       |
+    |+2   Logical block address       |
+    |+3   Logical block address (LSB) |
+    +---------------------------------+
+    |+4   Block length (MSB)          |
+    |+5   Block length                |
+    |+6   Block length                |
+    |+7   Block length (LSB)          |
+    +---------------------------------+
+
+
+* 1-17  READ EXTENDED (10) command
+----------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     1     0     1     0     0     0  | |  28  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |          READ destination address (MSB)       | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |          READ destination address             | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |          READ destination address             | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |          READ destination address (LSB)       | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |          Number of transfer blocks (MSB)      | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |          Number of transfer blocks (LSB)      | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |    TYPE   |  0     0     0     0     0     0  | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+The specified number of transfer blocks (16 bits) of data starting from the
+block specified by the READ target address (32 bits) are transferred to the
+initiator.
+
+If the number of transfer blocks is 0, nothing is transferred and the command
+ends normally.
+
+The data format to be transferred and the processing to be performed when an
+error occurs are specified by the "MODE SELECT" command issued before this
+command is issued.
+
+The "MODE SELECT" value is reset to the initial value when the power is turned
+on or the SCSI bus is reset.
+
+    TYPE:  00B = READ target address is a logical block address.
+           01B = READ target address is a BCD specification of
+                 MIN, SEC, FRAME, 0.
+           10B = READ target address is a BCD specification of
+                 TNO, 0, 0, 0.
+           11B = Unused.
+
+
+* 1-18  SEEK EXTENDED (10) command
+----------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     1     0     1     0     1     1  | |  2B  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |          SEEK destination address (MSB)       | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |          SEEK destination address             | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |          SEEK destination address             | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |          SEEK destination address (LSB)       | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |    TYPE   |  0     0     0     0     0     0  | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Performs a SEEK operation on the block specified by the SEEK target address.
+
+    TYPE:  00B = SEEK target address is a logical block address.
+           01B = SEEK target address is a BCD specification of
+                 MIN, SEC, FRAME, 0.
+           10B = SEEK target address is a BCD specification of
+                 TNO, 0, 0, 0.
+           11B = Unused.
+
+A status report is issued after the SEEK operation is completed.
+
+
+* 1-19  VERIFY command
+----------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     1     0     1     1     1     1  | |  2F  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |            VERIFY target address (MSB)        | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |            VERIFY target address              | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |            VERIFY target address              | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |            VERIFY target address (LSB)        | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |                Verify Length (MSB)            | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |                Verify Length (LSB)            | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |    TYPE   |  0     0     0     0     0     0  | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Reads CD-ROM data and checks for errors.
+
+No data transfer is required. Reads the specified length from the specified
+address and counts any errors.
+
+This command accumulates the error count in the error counter.
+The error counter can be cleared on "MODE SELECT" page 2AH.
+
+    TYPE:  00B = Target address to verify is logical block address.
+           01B = Target address to verify is BCD specification of
+                 MIN, SEC, FRAME, 0.
+           10B = Target address to verify is BCD specification of
+                 TNO, 0, 0, 0.
+           11B = Unused.
+
+
+* 1-20  READ SUB-CHANNEL command
+--------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     1     0     0     0     0     1     0  | |  42  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0  | MSF |  0  | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0  |SUBQ |  0     0     0     0     0     0  | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |            Sub-Channel Data Format            | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |                  Track Number                 | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |            Bytes to Transfer (MSB)            | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |            Bytes to Transfer (LSB)            | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Returns the currently active subcode Q and audio playing status.
+
+    MSF:  0 = CD-ROM address is returned in logical block format.
+          1 = CD-ROM address is returned in SCSI-2 specified MSF format.
+
+    SUBQ: 0 = Returns sub-channel data header only.
+          1 = Returns sub-channel data header + specified data in Sub-Channel
+              Data Format.
+
+    Sub-Channel Data Format:
+       00H - Sub-Q Channel Data
+       01H - CD-ROM Current Position
+       02H - Media Catalog Number (UPC/Bar Code)
+       03H - Track International Standard Recording Code (ISRC)
+
+    Track Number:
+       Only valid when Sub-Channel Data Format is 03H, indicates the track
+       number (TNO) for which ISRC data is to be transferred.
+
+The number of transfer bytes is the number of bytes you want to receive in the
+data-in phase.
+
+For the subchannel data header and data for each format, please refer to the
+"Subchannel Data List".
+
+
+* 1-21  READ TOC command
+------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     1     0     0     0     0     1     1  | |  43  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0  | MSF |  0  | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |             Starting Track Number             | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |            Bytes to Transfer (MSB)            | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |            Bytes to Transfer (LSB)            | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Transfers TOC (Table Of Contents) data to the initiator.
+
+    MSF:  0 = CD-ROM address is returned as a logical block address.
+          1 = CD-ROM address is returned in SCSI-2 specified MSF format.
+
+    Starting Track Number:
+          Starting track of the TOC track descriptor (note that this is binary
+          representation, not BCD representation. 00H to 63H (99D))
+          Retuns the lead-out address in AAH.
+
+    Number of bytes transferred:
+          4 bytes + number of tracks required x 8 bytes required.
+
+The transferred data is in the following format:
++-----------------------------------------+
+| 4-byte header                           |
+| 8-byte data for the specified track     |
+| 8-byte data for the specified track + 1 |
+|   .                                     |
+|   .                                     |
+|   .                                     |
+| Data in the lead-out area               |
++-----------------------------------------+
+
+Header format
++----+---------------------------------+
+| 00 | Not including self (MSB)        |
++----+                                 |
+| 01 | Data Length (LSB)               |
++----+---------------------------------+
+| 02 | First track number (01H to 63H) |
++----+---------------------------------+
+| 03 | Last track number (01H to 63H)  |
++----+---------------------------------+
+
+Data format of each track
++----+-------------------------------+
+| 00 |  Reserved                     |
++----+-------------------------------+
+| 01 |  ADR         |  Control       |
++----+-------------------------------+
+| 02 |  Track No. (01H to 63H, AAH)  |
++----+-------------------------------+
+| 03 |  Reserved                     |  For MSF format:
++----+-------------------------------+-+------------------------------------+
+| 04 |   (MSB)                       | | 04 |   00H                         |
++----+                               |-+------------------------------------+
+| 05 |  CD-ROM Address               | | 05 |   Minutes                     |
++----+                               |-+------------------------------------+
+| 06 |                               | | 06 |   Seconds                     |
++----+                               |-+------------------------------------+
+| 05 |   (LSB)                       | | 07 |   Frame                       |
++------------------------------------+-+------------------------------------+
+
+For details about ADR and Control in the data format of each track, refer to
+the "Subchannel Data List."
+
+Notes:
+------
+When executing this command on a PC-FX board or PC-FXGA, ADR may always be
+transferred as 0000B. (Depends on the connected drive)
+
+
+* 1-22  READ HEADER command
+------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     1     0     0     0     1     0     0  | |  44  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0  | MSF |  0  | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |            Logical block address (MSB)        | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |            Logical block address              | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |            Logical block address              | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |            Logical block address (LSB)        | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |            Bytes to Transfer (MSB)            | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |            Bytes to Transfer (LSB)            | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Seeks to the specified logical block address (independent of MSF) and
+transfers the CD-ROM header data of that block to the initiator.
+
+    MSF:  0 = CD-ROM address returned as a logical block address.
+          1 = CD-ROM address returned in SCSI-2 specified MSF format.
+
+Data transferred
++----+-------------------------------+
+| 00 |  CD-ROM Data Mode             |
++----+-------------------------------+
+| 01 |                               |
++----+                               |
+| 02 |  Reserved                     |
++----+                               |
+| 03 |                               |  For MSF format:
++----+-------------------------------+-+------------------------------------+
+| 04 |   (MSB)                       | | 04 |   00H                         |
++----+                               |-+------------------------------------+
+| 05 |  CD-ROM Address               | | 05 |   Minutes                     |
++----+                               |-+------------------------------------+
+| 06 |                               | | 06 |   Seconds                     |
++----+                               |-+------------------------------------+
+| 05 |   (LSB)                       | | 07 |   Frame                       |
++------------------------------------+-+------------------------------------+
+
+    CD-ROM Data Mode:
+        00H = All 0 data (MODE 0)
+        01H = User data + EDC/ECC (MODE 1)
+        02H = User data (MODE 2)
+
+
+* 1-23  PLAY AUDIO MSF command
+------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     1     0     0     0     1     1     1  | |  47  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |           Start Play Time (minutes)           | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |           Start Play Time (seconds)           | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |           Start Play Time (frame)             | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |           End Play Time (minutes)             | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |           End Play Time (seconds)             | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |           End Play Time (frame)               | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Plays from the specified MSF address to just before the specified MSF address.
+
+Note that the MSF address is an address that indicates minutes, seconds, and
+frames according to the SCSI-2 specification, and is expressed in binary
+notation, not BCD.
+
+
+* 1-24  PLAY AUDIO TRACK INDEX command
+--------------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     1     0     0     1     0     0     0  | |  48  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |           Start Play track number             | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |           Start Play index number             | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |           End Play track number               | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |           End Play index number               | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Plays from the specified start track index to just before the end track index.
+
+Notes:
+------
+When executing this command on a PC-FX board or PC-FXGA, the specified index
+number is ignored and the specified track is played from the beginning.
+
+
+* 1-25  PLAY AUDIO TRACK RELATIVE command
+-----------------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     1     0     0     1     0     0     1  | |  49  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  Relative logical block address in song (MSB) | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  Relative logical block address in song       | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  Relative logical block address in song       | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  Relative logical block address in song (LSB) | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |             Start track number                | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |        Number of blocks to play (MSB)         | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |        Number of blocks to play (LSB)         | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Plays the specified block length from the specified offset block address of
+the specified track.
+
+Notes:
+------
+This command cannot be used with PC-FX boards or PC-FXGA.
+
+
+* 1-26  PAUSE/RESUME command
+----------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     1     0     0     1     0     1     1  | |  4B  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |  0     0     0     0     0     0     0  |Re-  | |      |
+|    |                                         |sume | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Pauses or resumes audio playback/audio scanning.
+
+    RESUME:  0 = Pause.
+             1 = Resume.
+
+If playback is not in progress and RESUME = 0 is set to pause, the "CHECK
+CONDITION" status is returned.
+
+Notes:
+------
+If this command is executed during audio scanning with the PC-FX board or
+PC-FXGA, nothing will be done and the "CHECK CONDITION" status will be
+returned immediately.
+
+
+* 1-27  READ (12) command
+-------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  1     0     1     0     1     0     0     0  | |  A8  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |         Read destination address (MSB)        | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |         Read destination address              | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |         Read destination address              | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |         Read destination address (LSB)        | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |      Number of blocks to transfer (MSB)       | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |      Number of blocks to transfer             | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |      Number of blocks to transfer             | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |      Number of blocks to transfer (LSB)       | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 10 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 11 |   TYPE    |  0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+The specified number of transfer blocks of data, starting from the block
+specified by the READ target address, will be transferred to the initiator.
+
+If the number of transfer blocks is 0, nothing will be transferred and the
+command will terminate normally.
+
+The data format to be transferred, the processing to be performed when an
+error occurs, etc. are specified by the "MODE SELECT" command issued before
+issuing this command.
+
+The "MODE SELECT" value will be returned to the default value when the power
+is turned on or the SCSI bus is reset.
+
+    TYPE:  00B = READ target address is a logical block address.
+           01B = READ target address is a BCD specification of
+                 MIN, SEC, FRAME, 0.
+           10B = READ target address is a BCD specification of
+                 TNO, 0, 0, 0.
+           11B = Unused.
+
+
+* 1-28  PLAY AUDIO TRACK RELATIVE (12) command
+----------------------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  1     0     1     0     1     0     0     1  | |  A9  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  Relative logical block address in song (MSB) | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  Relative logical block address in song       | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  Relative logical block address in song       | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  Relative logical block address in song (LSB) | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |        Number of blocks to play (MSB)         | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |        Number of blocks to play               | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |        Number of blocks to play               | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |        Number of blocks to play (LSB)         | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 10 |             Start track number                | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 11 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Plays the specified block length from the specified offset block of the
+specified track.
+
+
+* 1-29  VERIFY (12) command
+---------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  1     0     1     0     1     1     1     1  | |  AF  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |          Verify target address (MSB)          | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |          Verify target address                | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |          Verify target address                | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |          Verify target address (LSB)          | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |              Verify length (MSB)              | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |              Verify length                    | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |              Verify length                    | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |              Verify length (LSB)              | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 10 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 11 |   TYPE    |  0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Reads CD-ROM data and checks for errors.
+
+No data transfer is required. Reads the specified length from the specified
+address and counts any errors.
+
+This command accumulates the error count in the error counter.
+The error counter can be cleared on page 2AH of "MODE SELECT".
+
+    TYPE:  00B = Target address to be verified is a logical block address.
+           01B = Target address to be verified is a BCD specification of
+                 MIN, SEC, FRAME, 0.
+           10B = Target address to be verified is a BCD specification of
+                 TNO, 0, 0, 0.
+           11B = Unused.
+
+
+* 1-30  AUDIO SCAN command
+--------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  1     1     0     1     0     0     1     0  | |  D2  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0  |SPEED| DIR | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |          Audio scan end address (MSB)         | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |          Audio scan end address               | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |          Audio scan end address               | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |          Audio scan end address (LSB)         | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |   TYPE    |  0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Specifies the audio scan end address and starts audio scanning (fast
+forward/rewind).
+
+   speed:  0 = slow scan
+           1 = fast scan
+
+     DIR:  0 = fast forward
+           1 = fast reverse
+
+    TYPE:  00B = Audio scan end address is block address.
+           01B = Audio scan end address is BCD specification of
+                 MIN, SEC, FRAME, 0.
+           10B = Audio scan end address is BCD specification of
+                 TNO, 0, 0, 0.
+           11B = Unused
+
+Notes:
+------
+When this command is executed on a PC-FX board or PC-FXGA, an audio scan is
+not performed and a "normal end status" is returned immediately.
+
+
+* 1-31  AUDIO TRACK SEARCH command
+----------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  1     1     0     1     1     0     0     0  | |  D8  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0  |PLAY | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |           Search target address (MSB)         | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |           Search target address               | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |           Search target address               | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |           Search target address (LSB)         | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |   TYPE    |  0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+SEARCH Seeks to the block specified by the target address and enters PLAY or PAUSE state.
+
+    PLAY:  0 = PAUSE after seek.
+           1 = PLAY after seek.
+
+    (Stereo or bilingual is specified by the audio control parameter
+    (page 0EH) and this mode plays to the end of the CD.)
+
+    TYPE:  00B = SEARCH destination address is a block address.
+           01B = SEARCH destination address is BCD specification of
+                 MIN, SEC, FRAME, 0.
+           10B = SEARCH destination address is BCD specification of
+                 TNO, 0, 0, 0.
+           11B = Unused.
+
+
+* 1-32  PLAY command
+--------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  1     1     0     1     1     0     0     1  | |  D9  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0  |    PLAY MODE    | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |              Play end address (MSB)           | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |              Play end address                 | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |              Play end address                 | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |              Play end address (LSB)           | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |   TYPE    |  0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Set the AUDIO TRACK play end address and play mode to start playing.
+
+    PLAY MODE:
+          000B = Playing without sound (MUTE)
+          001B = Playing only the L-ch (MAIN, both channel output)
+                 (Bilingual function supported)
+          010B = Playing only the R-ch (SUB, both channel output)
+                 (Bilingual function supported)
+          011B = L/R-ch stereo play (STEREO)
+          100B = Repeat playback (Repeat from the seek address at the time of
+                 issue to the specified end address) Stereo playback
+          101B = Playing in BUSY state (Can be terminated midway with
+                 "ABORT message") Stereo playback
+          111B = Unused.
+
+    TYPE:  00B = Performance end address is block address.
+           01B = Performance end address is BCD specification of
+                 MIN, SEC, FRAME, 0.
+           10B = Performance end address is BCD specification of
+                 TNO, 0, 0, 0.
+           11B = Unused.
+
+Notes:
+------
+For PC-FX boards and PC-FXGAs, stereo playback may always occur regardless of
+whether PLAY MODE: 000B, 001B, or 010B is specified. (Depends on the connected
+drive). After the command is completed, a "normal completion status" is
+returned.
+
+
+* 1-33  STILL command
+---------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  1     1     0     1     1     0     1     0  | |  DA  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Starts the STILL operation during playback.
+
+To continue playing again, use the "PLAY" command or the "PAUSE/RESUME"
+command.
+
+
+* 1-34  SET STOP-TIME command
+-----------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  1     1     0     1     1     0     1     1  | |  DB  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0  |     Set time (minutes)      | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |               Set time (seconds)              | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Specifies the time until transitioning to the STOP state after a series of
+operations is completed.
+
+The set time is specified in BCD.
+If the minutes:seconds are 00:00, it specifies that the device will not
+automatically transition to the STOP state.
+
+The default setting is 10 minutes.
+
+Notes:
+------
+This command is invalid on PC-FX boards and PC-FXGAs, and a "normal end
+status" is returned. (The initial settings are also undefined.)
+
+
+* 1-35  EJECT command
+---------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  1     1     0     1     1     1     0     0  | |  DC  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0     0  |IMMED| |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Makes the CD ready to be removed.
+
+    IMMED:  0 = Returns status after command execution.
+            1 = Returns status before executing command when command is
+                received.
+
+    If there is no EJECT functionality, "CHECK CONDITION" status is returned.
+
+
+* 1-36  READ SUBCODE-Q command
+------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  1     1     0     1     1     1     0     1  | |  DD  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0  | Number of bytes to transfer | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+The current playing status and CD subcode Q channel address data are
+transmitted to the initiator.
++----+-----------------+
+| 00 | Playing status  |
++----+-----------------+
+| 01 | CONTROL         |
++----+-----------------+
+| 02 | TNO (Track No.) |
++----+-----------------+
+| 03 | INDEX           |
++----+-----------------+
+| 04 | MIN             |-+
++----+-----------------+ |
+| 05 | SEC             | | Relative address from the beginning of TNO
++----+-----------------+ |
+| 06 | FRAME           |-+
++----+-----------------+
+| 07 | AMIN            |-+
++----+-----------------+ |
+| 08 | ASEC            | | Absolute address from the beginning of the CD
++----+-----------------+ |
+| 09 | AFRAME          | +
++----+-----------------+
+
+00  Playing Status
++-----+--------------------------------+
+| 00H | Playing                        |
++-----+--------------------------------+
+| 01H | STILL (Pause) in progress      |
++-----+--------------------------------+
+| 02H | PAUSE after AUDIO TRACK SEARCH |
++-----+--------------------------------+
+| 03H | Playback stopped               |
++-----+--------------------------------+
+
+01  Control
+
++---------+-------------------------+-------------------------+
+|   Value |            0            |            1            |
+| Bit     |                         |                         |
++---------+-------------------------+-------------------------+
+|    4    | Without pre-emphasis    | With pre-emphasis       |
++---------+-------------------------+-------------------------+
+|    5    | Digital copy prohibited | Digital copy permitted  |
++---------+-------------------------+-------------------------+
+|    6    | Audio track             | Data track              |
++---------+-------------------------+-------------------------+
+|    7    | 2 Audio channels        | 4 Audio channels        |
++---------+-------------------------+-------------------------+
+
+
+* 1-37  READ TOC command
+------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  1     1     0     1     1     1     1     0  | |  DE  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     0     0  |   TYPE    | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |                   00H / TNO                   | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Transfers the TOC (Table of Contents) data of the inserted CD to the
+initiator.
+
+    TYPE: The value of this bit determines the following.
+        00B = Transfers the minimum and maximum track numbers on the disc.
+        01B = Transfers the end of the program on the disc (start position
+              of the lead-out area).
+        10B = Transfers data related to the track specified by the TNO
+              parameter in Byte 02. (TNO is expressed in BCD)
+        11B = Transfers TOC data according to the TNO parameter in Byte 02.
+
+    TNO: This parameter is valid only when the TYPE bit is 10B/11B, and
+         specifies the track number, etc. to be transferred in BCD.
+
+This command transfers information regarding the TOC (Table of Contents) data
+of the CD currently inserted in the CD-ROM drive to the initiator in the
+DATA IN phase that is executed following the COMMAND phase.
+
+The amount of data transferred is 4 bytes, and if the CD-ROM drive is not in
+a READY state, no data transfer is performed and a "CHECK CONDITION" status is
+returned.
+
+The transfer information can be selected using the TYPE bits in Byte 01,
+Bit 1, and 0.
+
+The contents and format of the data to be transferred are shown below.
+
+(1) TYPE = 00B
+Transmits the minimum track number (MIN-TNO) and maximum track number
+(MAX-TNO) on the disc.
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  |
+|Byte|     |     |     |     |     |     |     |     |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 00 |  Minimum track number on the disc (MIN-TNO)   |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 01 |  Maximum track number on the disc (MAX-TNO)   |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 02 |  0     0     0     0     0     0     0     0  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 03 |  0     0     0     0     0     0     0     0  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+
+
+(2) TYPE = 01B
+Transmits the address of the subcode-Q channel of the last program position
+on the disc (start position of the lead-out area). Note that the last logical
+block address transferred by the "READ CAPACITY" command is this address data
+converted into a logical block address and then subtracted by one block.
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  |
+|Byte|     |     |     |     |     |     |     |     |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 00 |  Leadout area start subcode-Q address         |
+|    |                                       (AMIN)  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 01 |  Leadout area start subcode-Q address         |
+|    |                                       (ASEC)  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 02 |  Leadout area start subcode-Q address         |
+|    |                                     (AFRAME)  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 03 |  0     0     0     0     0     0     0     0  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+
+
+(3) TYPE = 10B
+Transmits information about the song specified by TNO in Byte 02.
+TNO is two-digit BCD data (01-99). If a song number equal to or greater than
+the maximum song number on the disc is specified, or equal to or less than
+the minimum song number on the disc, the "CHECK CONDITION" status is returned.
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  |
+|Byte|     |     |     |     |     |     |     |     |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 00 |  Start position of specified song (AMIN)      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 01 |  Start position of specified song (ASEC)      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 02 |  Start position of specified song (AFRAME)    |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 03 |  0     0     0     0     0     0     0     0  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+
+  (1) Byte 00-02: Start position of the specified track (subcode - Q address
+      absolute time) Indicates the start address data of the specified track
+      (all 2-digit BCD data).
+
+  (2) Byte 03: Control information of the specified track
+      =000000x0B ... The specified track is an AUDIO TRACK.
+      =000001x0B ... The specified track is a DATA TRACK.
+
+
+(4) TYPE=11B
+Transfers the TOC (Table of Contents) data recorded in the lead-in area to the
+initiator.  The format of the transferred data according to each TNO is shown
+below.
+
+  (1) When TNO = A0
+
+D7                                            D0
+ +--------------------------------------------+
+ | Number of transferred bytes (upper) (=00H) |
+ +--------------------------------------------+  2 Bytes
+ | Number of transferred bytes (lower) (=0AH) |
+ +--------------------------------------------+
+ | First track number information             |  10 Bytes
+ |  (POINT=A0H)                               |
+ +--------------------------------------------+
+
+  (2) When TNO = A1
+
+D7                                            D0
+ +--------------------------------------------+
+ | Number of transferred bytes (upper) (=00H) |
+ +--------------------------------------------+  2 Bytes
+ | Number of transferred bytes (lower) (=0AH) |
+ +--------------------------------------------+
+ | Final track number information             |  10 Bytes
+ |  (POINT=A1H)                               |
+ +--------------------------------------------+
+
+  (3) When TNO = A2
+
+D7                                            D0
+ +--------------------------------------------+
+ | Number of transferred bytes (upper) (=00H) |
+ +--------------------------------------------+  2 Bytes
+ | Number of transferred bytes (lower) (=0AH) |
+ +--------------------------------------------+
+ | Leadout time information                   |  10 Bytes
+ |  (POINT=A2H)                               |
+ +--------------------------------------------+
+
+  (4) When TNO = B0
+
+D7                                            D0
+ +--------------------------------------------+
+ | Number of transferred bytes (upper) (=00H) |
+ +--------------------------------------------+  2 Bytes
+ | Number of transferred bytes (lower) (=14H) |
+ +--------------------------------------------+
+ | Final session's                            |  10 Bytes
+ |    POINT=B0H information                   |
+ +--------------------------------------------+
+ | Final session-1's                          |  10 Bytes
+ |    POINT=B0H information                   |
+ +--------------------------------------------+
+
+  (5) When TNO = 00
+
+D7                                            D0
+ +--------------------------------------------+
+ | Number of transferred bytes (upper)        |
+ +--------------------------------------------+  2 Bytes
+ | Number of transferred bytes (lower)        |
+ +--------------------------------------------+
+ | First track number information             |  10 Bytes
+ |  (POINT=A0H)                               |
+ +--------------------------------------------+
+ | Final track number information             |  10 Bytes
+ |  (POINT=A1H)                               |
+ +--------------------------------------------+
+ | Leadout time information                   |  10 Bytes
+ |  (POINT=A2H)                               |
+ +--------------------------------------------+
+ | Start time information of the first song   |  10 Bytes
+ |                                            |      |
+ +--------------------------------------------+      |
+ |                                            |      |
+ |  ---------                                   -----|
+ |                                            |      |
+ +--------------------------------------------+      |
+ | Start time information of the last song    |  10 Bytes
+ |                                            |
+ +--------------------------------------------+
+
+Number of transferred bytes: Indicates the amount of data to be transferred.
+However, this does not include the 2 bytes of the data itself.
+        When TNO=00, this varies depending on the number of songs on the disc.
+        (28H-3FCH; 1-99 songs)
+
+
+A 10-byte description of each TNO
+
++----+---+---+---+---+---+---+---+---+
+|Bit | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
+|Byte|   |   |   |   |   |   |   |   |
++----+---+---+---+---+---+---+---+---+
+| 00 |    CONTROL    | 0   0   0   0 |
++----+---+---+---+---+---+---+---+---+
+| 01 | 0   0   0   0   0   0   0   0 |
++----+---+---+---+---+---+---+---+---+
+| 02 |           POINT               | } Indicates the type of information
++----+---+---+---+---+---+---+---+---+
+| 03 |           MIN                 |  If TNO=other than B0H, this is the
++----+---+---+---+---+---+---+---+---+  address where this information was
+| 04 |           SEC                 |  written (this is an address within the
++----+---+---+---+---+---+---+---+---+  TOC and has no particular meaning).
+| 05 |           FRAME               |
++----+---+---+---+---+---+---+---+---+
+| 06 | 0   0   0   0   0   0   0   0 |
++----+---+---+---+---+---+---+---+---+
+| 07 |           PMIN                |
++----+---+---+---+---+---+---+---+---+
+| 08 |           PSEC                |  Listed Below
++----+---+---+---+---+---+---+---+---+
+| 09 |           PFRAME              |
++----+---+---+---+---+---+---+---+---+
+
+(1) POINT=A0H
+The data in POINT=A0H in the TOC area (in the case of a multi-session disc,
+the lead-in area of the innermost session)
+    PMIN: The first track number on the disc
+    PSEC: DISC-ID (00H: = CD-DA/CD-ROM, 10H: = CD-I, 20H = CD-ROM XA)
+    PFRM: (00)
+
+(2) POINT=A1H
+POINT=A1H data in the TOC area (in the case of a multi-session disc, the
+lead-in area of the outermost session)
+    PMIN: Last track number on the disc
+    PSEC: (00)
+    PFRM: (00)
+
+(3) POINT=A2H
+POINT=A2H data in the TOC area (in the case of a multi-session disc, the data
+in the lead-in area of ??the outermost session)
+    PMIN: Start time of the lead-out area (minutes: 2 BCD digits)
+    PSEC: Start time of the lead-out area (seconds: 2 BCD digits)
+    PFRM: Start time of the lead-out area (sectors: 2 BCD digits)
+
+(4) POINT=B0H (TNO=B0H) of the last session
+Depending on the structure of the disc, the 10 bytes of data will be as follows:
+    a) Normal disc
+       All 10 bytes are 00H
+    b) Hybrid single-session disc
+       Subcode Q of the lead-in area of ??session 1, mode 5, POINT = B0H
+       information
+    c) Hybrid multi-session disc
+       Subcode Q of the lead-in area of ??the last session, mode 5, POINT = B0H
+       information
+
+(5) POINT=B0H (TNO=B0H) of the last session - 1
+The data of the 10 bytes will be as follows depending on the structure of the
+disc.
+    a) Normal disc
+       All 10 bytes are 00H
+    b) Hybrid single-session disc
+       All 10 bytes are 00H
+    c) Hybrid multi-session disc
+       Subcode Q of the lead-in area of ??the last session - 1, mode 5,
+       POINT = B0H information
+
+Note: In mode 5, when POINT = B0H
+    MIN, SEC, and FRAME indicate the start time of the program area of the
+    next session.
+    Normally, the first track of this session is 2 seconds later.
+    PMIN, PSEC, and PFRAME indicate the maximum possible start time of the
+    lead-out area, and therefore have no particular meaning in terms of
+    control.
+
+(6) Start time information for each track (TNO = 00H)
+    PMIN: Start time for each track (minutes; 2 BCD digits)
+    PSEC: Start time for each track (seconds; 2 BCD digits)
+    PFRM: Start time for each track (sectors; 2 BCD digits)
+        Note that the POINT value is incremented from the first track number
+        to the last track number.  (2 BCD digits)
+
+Important Points:
+-----------------
+When you execute this command on a PC-FX board or PC-FXGA, the lead-out area
+address returns the actual address + 1.
+
+
+*** About interrupting a READ command
+
+When you execute a SCSI READ command, you cannot normally interrupt the
+command unless the host (PC-FX) has read all the data.
+
+If you want to transfer data while reading video data from a CD-ROM (during
+READ), you can interrupt the READ by sending an ABORT message to the CD-ROM
+drive.
+
+Sets the SCSI ATN to true while reading data. (ATTENSION state) When it
+transitions to the MESSAGE OUT phase, it sends an ABORT message (06h) to the
+target (CD-ROM drive).
+
+The host (PC-FX) sets ATN to false when REQ is true and ACK is false in the
+handshake with REQ and ACK at the end of the MESSAGE OUT phase.
+The target then transitions to the BUS FREE phase to indicate that it has
+responded to the message.
+
+The host must continue to take in data (dummy read) until the target
+transitions to the MESSAGE OUT phase and receives this message. (If you stop
+the import, the state will never change.)
+
+In other words, if you set ATN to true during data transfer, data import will
+continue until the MESSAGE OUT phase is reached. The host (PC-FX) then sends
+an ABORT message to the target (CD-ROM).
+The target imports the MESSAGE and sets ATN to false. The target transitions
+to the BUS FREE phase.
+
+You can now interrupt the READ.
+
+This is because the CD-ROM drive monitors the ATN on a block-by-block basis
+during data transfer, and if the SCSI handshake is interrupted in the middle
+of this, the CD-ROM drive will time out without noticing the ATN.
+So, instead of letting it time out, you need to continue the dummy handshake
+until the ATN is recognized.
+
+
+*** About AUDIO PLAY
+
+There are commands 4*h and D*h to execute AUDIO PLAY, but please use one of
+the following three methods to use them.
+    (1) Issue the 4*h command alone.
+    (2) Issue D8h (PLAY bit = 1) alone.
+    (3) Issue the D8h (PLAY bit = 0) and D9h commands as a pair.
+
+    By using these,
+     * the start address of the performance
+     * the end address of the performance (lead-out area in the case of 2)
+       are set,
+
+     * Played in PLAY MODE (stereo, main, etc.).
+       For 1 and 2, specify with page 0Eh of 15h, the default value is stereo.
+       If you do not want to change it, there is no need to issue the 15h
+       command.
+       For 3, specify with D9h.
+
+If you issue a 4Bh (PAUSE/RESUME), D2h (AUDIO SCAN), or DAh (STILL) command
+after PLAY END has been reached (the specified playback end address has been
+reached), an error (2Ch: NOT AUDIO PLAY STATE) will be returned.
+In that case, issue a valid AUDIO PLAY-related command.
+
+The CD-ROM drive does not retain the previous state and return to that state
+after a command is executed (for example, issuing an AUDIO SCAN command during
+PAUSE and then entering PAUSE operation after PLAY END), so such state
+management should be done by each program separately.
+
+Notes on address specification for PLAY commands
+
+(1) When specifying a track number to play, you can set the end address to the
+number of the track you want to play + 1, but if you want to play the 99th
+track, you cannot specify this because 99 + 1 = 100. Do not create CDs with
+99 tracks.
+If you need to play a CD with 99 tracks, specify the end address
+(lead out - 1) in the logical block address or ATIME, or issue the D8h
+(PLAY bit = 1) command alone.
+
+(2) You can specify an index to play with the 48h command, but if you specify
+an index number that does not exist on the disc, the search will continue
+indefinitely without returning an error.
+As a general rule, do not use index numbers other than 1, and if you specify
+another number, be sure to check that the CD has that track and index number
+before specifying it.
+
+
+============================================
+
+Chapter 2 - Subchannel Data List
+--------------------------------
+
+Subchannel data consists of a 4-byte header (subchannel data header) followed
+by data (subchannel data block).
+The contents of these vary depending on the subchannel data format code.
+
+
+2-1 Sub-Q Channel Data (Data Format 00h)
+----------------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  |
+|Byte|     |     |     |     |     |     |     |     |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 00 |                   Reserved                    |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 01 |                 Playing Status                |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 02 |  (MSB)   Subchannel data length               |
+| 03 |  (LSB)                                        |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 04 |       Subchannel data format code (00h)       |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 05 |          ADR          |       CONTROL         |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 06 |                 Track Number                  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 07 |                 Index Number                  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 08 |  (MSB)        Absolute Address                |
+| 11 |  (LSB)                                        |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 12 |  (MSB)     Track Relative Address             |
+| 15 |  (LSB)                                        |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 16 |MCval|                Reserved                 |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 17 |  (MSB)     Media Catalog Number               |
+| 31 |  (LSB)                                        |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 32 |TCval|                Reserved                 |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 33 |  (MSB)         Track ISRC Code                |
+| 47 |  (LSB)                                        |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+
+Playing status
+   Indicates the current playing status
+
+    11h  Audio playing
+    12h  Audio playing PAUSE
+    13h  Audio playing finished
+    14h  Audio playing finished with error
+    15h  No status
+
+ADR
+   Indicates the type of data for subchannel Q at the current position.
+
+    00h  No information
+    01h  Current position data
+    02h  Media catalog number
+    03h  ISRC code
+
+CONTROL
+
+    bit 0
+        0: Audio without pre-emphasis
+        1: Audio with pre-emphasis
+    bit 1
+        0: Digital copy prohibited
+        1: Digital copy permitted
+    bit 2
+        0: Audio track
+        1: Data track
+    bit 3
+        0: Two channel audio
+        1: Four channel audio
+
+Track Number
+   Indicates the current track number.
+
+Index Number
+   Indicates the current index number.
+
+Absolute address
+   This indicates the address from the beginning of the disc.
+   In the case of MSF format, this is expressed in binary order as
+   0, minutes, seconds, frames.
+
+Track relative address
+   This indicates the address from the beginning of the current track.
+   In the case of MSF format, this is expressed in binary order as
+   0, minutes, seconds, frames.
+
+MCVal (Media catalog valid)
+   When this bit is 1, the media catalog number field is valid.
+
+Media catalog number
+   This is the media catalog number (POS/barcode).
+   It is returned in ASCII code, and the remaining data is set to 00H.
+   The media catalog number is different for each disc.
+
+TCVal (Track code valid)
+   When this bit is 1, the track ISRC code field is valid.
+
+Track ISRC code
+   ISRC code. Returns ASCII code, with the remaining data set to 00H.
+
+Notes:
+------
+For the PC-FX board and PC-FXGA, the track ISRC code returns 'FX-98IF', with
+the remaining data set to 00H.
+
+
+2-2 CD-ROM Current Position Data (Data Format 01h)
+--------------------------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  |
+|Byte|     |     |     |     |     |     |     |     |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 00 |                   Reserved                    |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 01 |                 Playing Status                |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 02 |  (MSB)   Subchannel data length               |
+| 03 |  (LSB)                                        |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 04 |       Subchannel data format code (00h)       |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 05 |          ADR          |       CONTROL         |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 06 |                 Track Number                  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 07 |                 Index Number                  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 08 |  (MSB)        Absolute Address                |
+| 11 |  (LSB)                                        |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 12 |  (MSB)     Track Relative Address             |
+| 15 |  (LSB)                                        |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+
+
+2-3 Media Catalog Number Data (Data Format 02h)
+-----------------------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  |
+|Byte|     |     |     |     |     |     |     |     |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 00 |                   Reserved                    |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 01 |                 Playing Status                |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 02 |  (MSB)   Subchannel data length               |
+| 03 |  (LSB)                                        |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 04 |       Subchannel data format code (00h)       |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 05 |                   Reserved                    |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 06 |                   Reserved                    |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 07 |                   Reserved                    |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 08 |MCval|                Reserved                 |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 09 |  (MSB)     Media Catalog Number               |
+| 23 |  (LSB)                                        |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+
+
+2-4 International Standard Recording Code Data (Data Format 03h)
+----------------------------------------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  |
+|Byte|     |     |     |     |     |     |     |     |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 00 |                   Reserved                    |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 01 |                 Playing Status                |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 02 |  (MSB)   Subchannel data length               |
+| 03 |  (LSB)                                        |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 04 |       Subchannel data format code (00h)       |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 05 |          ADR          |       CONTROL         |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 06 |                 Track Number                  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 07 |                   Reserved                    |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 08 |TCval|                Reserved                 |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 09 |  (MSB)       Track ISRC Code                  |
+| 23 |  (LSB)                                        |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+
+
+============================================
+
+Chapter 3 - Parameter list (SCSI-2 compliant)
+---------------------------------------------
+
+3-1  Mode Select Data Header
+---------------------------- 
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |                   Reserved                    | |  00  |
+|    |  0     0     0     0     0     0     0     0  | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |                  Medium Type                  | |  00  |
+|    |  0     0     0     0     0     0     0     0  | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |           Drive Specific Parameter            | |  00  |
+|    |  0     0     0     0     0     0     0     0  | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |            Block Descriptor Length            | |  00/ |
+|    |  0     0     0     0     0    0/1    0     0  | |  08  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+If the Block Descriptor Length (4th byte) is 00, it indicates that the data
+that follows is a page descriptor, and if it is 08H, it indicates that there
+are 8 bytes of block descriptors and the data that follows is a page
+descriptor.
+
+
+3-2  Mode Sense Data Header
+--------------------------- 
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |              Sense Data Length                | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |                  Medium Type                  | |  00  |
+|    |  0     0     0     0     0     0     0     0  | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |           Drive Specific Parameter            | |  00  |
+|    |  0     0     0     0     0     0     0     0  | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |            Block Descriptor Length            | |  00/ |
+|    |  0     0     0     0     0    0/1    0     0  | |  08  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+The Sense Data Length (first byte) is the total number of data bytes excluding
+itself; it is not affected by the number of transferred bytes in the CDB, and
+is a value that changes depending on the DBD and page code.
+
+If the DBD (Disable Block Descriptor) bit in the CDB is 0, the Block
+Descriptor Length takes the value 08H, indicating that an 8-byte block
+descriptor will be transferred after the header; if the DBD bit is 1, it
+takes the value 00H, indicating that a page descriptor will be transferred
+immediately after the header.
+
+
+3-3  Block Descriptor
+--------------------- 
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |                 Density Code                  | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+-+ Only Valid
+| 01 |           Largest Block Count (MSB)           | |      | | for
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+ | Mode Sense
+| 02 |           Largest Block Count                 | |      | |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+ | Not Valid
+| 03 |           Largest Block Count (LSB)           | |      | | for
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+-+ Mode Select
+| 04 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |         Number of Bytes in one block (MSB)    | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |         Number of Bytes in one block          | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |         Number of Bytes in one block (LSB)    | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+
+(1) Density Code: 00H - CD-ROM media mode
+
++------+--------+-----------+---+-----+------------------+
+| SYNC | HEADER | USER DATA | 0 | EDC | ERROR CORRECTION | MODE1
+| 12   | 4      | 2048      | 8 | 4   | 276              |
++------+--------+-----------+---+-----+------------------+
+|      |        |         User Data (2336)               | MODE2
++------+--------+----------------------------------------+
+                |<-- 2048 ->|                            +  Number of bytes
+                |<-- 2336 ------------------------------>|  per block can
+       |<----------- 2340 ------------------------------>|  be specified
+
+
+(2) Density Code: 81H - CD-ROM XA media mode
+
++------+--------+------------+-----------+-----+------------------+
+| SYNC | HEADER | SUB HEADER | USER DATA | EDC | ERROR CORRECTION | FORM1
+| 12   | 4      | 8          | 2048      | 4   | 276              |
++------+--------+------------+-----------+-----+--------+---------+
+|      |        |            |  USER DATA (2324)        | EDC (4) | FORM2
++------+--------+------------+--------------------------+---------+
+                             |<-- 2048 ->|
+                |<--------------- 2056 ->|
+                             |<-- 2324 ---------------->|
+                |<--------------- 2332 ---------------->|
+                |<--------------- 2336 -------------------------->|
+       |<------------------------ 2340 -------------------------->|
+
+
+3-4 Page 29H (Buffer usage parameters)
+--------------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     1     0     1     0     0     1  | |  29  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |                  Page Length                  | |  01  |
+|    |  0     0     0     0     0     0     0     1  | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |       Read-ahead ring buffer capacity         | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Specifies how to use the RAM on the CD-ROM.
+The following values can be specified for the capacity of the read-ahead ring
+buffer, the default being 0.
+
+    0...256KB read-ahead ring buffer
+    1...128KB read-ahead ring buffer
+    2...No read-ahead ring buffer
+
+By specifying this page and issuing "MODE SELECT", buffer management will be
+initialized and the read-ahead ring buffer will be disabled.
+
+Notes:
+------
+Make sure to specify 0 (256KB) as the capacity of the read-ahead ring buffer.
+
+
+3-5  Page 2AH (Error count parameters)
+--------------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     1     0     1     0     1     0  | |  2A  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |                  Page Length                  | |  02  |
+|    |  0     0     0     0     0     0     1     0  | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |                Error count (MSB)              | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |                Error count (LSB)              | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Returns the number of errors processed within the CD-ROM. When setting this,
+you would normally specify 0 to clear the count value.
+
+This error is an ECC error when reading data, and one error will be counted as
+one, regardless of the error retry value. After specifying this page with
+"MODE SELECT" and clearing the count value, an error will be counted if an ECC
+error occurs while executing READ (6, 10, 12 byte commands) and VERIFY
+(10, 12 byte commands).
+
+You can specify this page with "MODE SENSE" and read the error count value up
+to that point.
+
+
+3-6  Page 2BH (Pitch control parameters)
+----------------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     1     0     1     0     1     1  | |  2B  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |                  Page Length                  | |  01  |
+|    |  0     0     0     0     0     0     0     1  | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |              Pitch Control Value              | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+Specifies the pitch control value during PLAY.
+The variable width is 1% per unit, and the variable range is -10% to 10%
+(value = F6H to 0AH).
+
+The operation can be specified during PLAY or other than PLAY (including STOP
+state), and the previous pitch will be maintained even when the next PLAY
+command is issued after STOP.
+
+The default state (value = 00H) will be restored when the power is turned on
+or the SCSI bus is reset.
+
+Notes:
+------
+Even if this command is executed on a PC-FX board or PC-FXGA, the pitch will
+not change and a "normal completion status" will be returned.
+
+
+3-7  Page 0EH (Audio control parameters)
+----------------------------------------
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  | | Note |
+|Byte|     |     |     |     |     |     |     |     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 00 |  0     0     0     0     1     1     1     0  | |  0E  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 01 |  0     0     0     0     1     1     1     0  | |  0E  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 02 |  0     0     0     0     0  |IMMED|  0     0  | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 03 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 04 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 05 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 06 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 07 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 08 |  0     0     0     0  |     Port0 Control     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 09 |  1     1     1     1     1     1     1     1  | |  FF  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 10 |  0     0     0     0  |     Port1 Control     | |      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 11 |  1     1     1     1     1     1     1     1  | |  FF  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 12 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 13 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 14 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+| 15 |  0     0     0     0     0     0     0     0  | |  00  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+-+------+
+
+IMMED:
+    Commands 0-47, 48, 49, and A9 return status after playback ends.
+    Commands 1-47, 48, 49, and A9 return status after playback begins.
+
+Control:
+    0000b - Silent playback mode
+    0001b - Channel 0 is output from the port.
+    0010b - Channel 1 is output from the port.
+
++----------------+--------+--------+--------+--------+
+|                |  MUTE  |  MAIN  |  SUB   | STEREO |
++----------------+--------+--------+--------+--------+
+| Port0 Control  |  0000  |  0001  |  0010  |  0001  |
++----------------+--------+--------+--------+--------+
+| Port1 Control  |  0000  |  0001  |  0010  |  0010  |
++----------------+--------+--------+--------+--------+
+
+Any settings other than the above combinations, such as reverse output, will
+result in an error.
+
+The operation settings can be specified during or outside of PLAY, and after
+STOP, the previous settings will be retained even for the next PLAY command.
+The initial state (IMMED=1, STEREO) will be restored when the power is turned
+on or the SCSI bus is reset.
+
+Notes:
+------
+PC-FX boards and PC-FXGAs may always play in stereo. (Depends on the connected
+drive). After the command has finished, a "normal completion status" will be
+returned.
+
+
+============================================
+
+Chapter 4 - Vendor Unique Parameter List
+----------------------------------------
+
+Below is the vendor unique parameter list for MODE SELECT.
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  |
+|Byte|     |     |     |     |     |     |     |     |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 00 |  0     0     0     0     0     0     0     0  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 01 |  0     0     0     0     0     0     0     0  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 02 |  0     0     0     0     0     0     0     0  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 03 |        Block Descriptor Length (=00H)         |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 04 |  XA |  SH |  0     0     0  |  EC |     EJ    |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 05 |  0     0     0     0     0     0     0     0  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 06 |  0     0     0     0     0     0     0     0  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 07 |  0     0     0     0     0     0     0     0  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 08 |  0     0     0     0     0     0     0     0  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 09 |  0     0     0     0  |   Number of retries   |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+
+(1) Byte 03: Block Descriptor Length
+    Specify 00H (no block descriptor).
+
+(2) Byte 04, Bit7: XA
+    Specifies CD-ROM/XA format.
+    XA=0B   Specifies CD-ROM format.
+    XA=1B   Specifies XA format.
+
+(3) Byte 04, Bit 6: SH
+    This parameter is only valid when the XA bit is 1B, and specifies whether
+    or not to transfer the subheader.
+    SH=0B   Transfers the subheader.
+    SH=1B   Does not transfer the subheader.
+
+(4) Byte 04, Bit2: EC
+    Specifies whether or not to perform error correction.
+    EC=0B   Performs error correction.
+    EC=1B   Does not perform error correction.
+
+(5) Byte 04, Bit1-0: EJ
+    Specifies the data and transfer contents for each block.
+    The following processing is performed depending on the XA/SH/EC bits and
+    disk format.
+
+XA bit = 0
++----+----+----+----+--------------------------------------+
+|    |    |    |    |   Disk Format                        |
+|    |    |    |    +--------------------------------------+
+| XA | SH | EC | EJ |   MODE1/MODE2 (*1)                   |
+|    |    |    |    +-------------------+------------------+
+|    |    |    |    | Bytes transferred | Error correction |
++----+----+----+----+--------------------------------------+
+|    |    |    | 00 |       2048        |       Yes        |
+|    |    |    +----+-------------------+------------------+
+|    |    |    | 01 |       2048        |       Yes        |
+|    |    | 0  +----+-------------------+------------------+
+|    |    |    | 10 |       2336        |       Yes        |
+|    |    |    +----+-------------------+------------------+
+|    |    |    | 11 |       2340        |       Yes        |
+| 0  | X  +----+----+-------------------+------------------+
+|    |    |    | 00 |       2048        |       Yes        |
+|    |    |    +----+-------------------+------------------+
+|    |    |    | 01 |       2048        |       Yes        |
+|    |    | 1  +----+-------------------+------------------+
+|    |    |    | 10 |       2336        |       Yes        |
+|    |    |    +----+-------------------+------------------+
+|    |    |    | 11 |       2340        |       Yes        |
++----+----+----+----+-------------------+------------------+
+*1 Since it is not possible to distinguish between MODE1 and MODE2, the number
+of transfer bytes will be set to that of MODE1.
+
+Yes : Performs error correction.
+No  : Does not perform error correction.
+ -  : Responds with a check condition.
+
+      12      4       2048      8    4          276
+   +------+-------+-----------+---+-----+-------------------+
+   |      |       |           |   |     | Error Correction  |
+   | SYNC | HEADER| USER DATA | 0 | EDC +---------+---------+
+   |      |       |           |   |     |    P    |    Q    |
+   +------+-------+-----------+---+-----+-------------------+
+                  |           |                             |
+                  +-----------+                             |
+   2048           | USER DATA |                             |
+                  +-----------+                             |
+                  |           |                             |
+                  +-----------+-----------------------------+
+   2338           | USER DATA |  Variable (288)             |
+                  +-----------+-----------------------------+
+                  |           |                             |
+                  +-----------+----------------------------------+
+   2340           | USER DATA |  Variable (292)                  |
+                  +-----------+----------------------------------+
+
+
+XA bit = 1
++----+----+----+----+--------------------------------------+
+|    |    |    |    |   Disk Format                        |
+|    |    |    |    +--------------------------------------+
+| XA | SH | EC | EJ |   MODE1/MODE2/form1/form2 (*2)       |
+|    |    |    |    +-------------------+------------------+
+|    |    |    |    | Bytes transferred | Error correction |
++----+----+----+----+--------------------------------------+
+|    |    |    | 00 |       2056        |       Yes        |
+|    |    |    +----+-------------------+------------------+
+|    |    |    | 01 |       2056        |       Yes        |
+|    |    | 0  +----+-------------------+------------------+
+|    |    |    | 10 |       2336        |       Yes        |
+|    |    |    +----+-------------------+------------------+
+|    |    |    | 11 |       2340        |       Yes        |
+|    | 0  +----+----+-------------------+------------------+
+|    |    |    | 00 |       2056        |       Yes        |
+|    |    |    +----+-------------------+------------------+
+|    |    |    | 01 |       2056        |       Yes        |
+|    |    | 1  +----+-------------------+------------------+
+|    |    |    | 10 |       2336        |       Yes        |
+|    |    |    +----+-------------------+------------------+
+|    |    |    | 11 |       2340        |       Yes        |
+| 1  +----+----+----+-------------------+------------------+
+|    |    |    | 00 |       2048        |       Yes        |
+|    |    |    +----+-------------------+------------------+
+|    |    |    | 01 |       2048        |       Yes        |
+|    |    | 0  +----+-------------------+------------------+
+|    |    |    | 10 |       2336        |       Yes        |
+|    |    |    +----+-------------------+------------------+
+|    |    |    | 11 |       2340        |       Yes        |
+|    | 1  +----+----+-------------------+------------------+
+|    |    |    | 00 |       2048        |       Yes        |
+|    |    |    +----+-------------------+------------------+
+|    |    |    | 01 |       2048        |       Yes        |
+|    |    | 1  +----+-------------------+------------------+
+|    |    |    | 10 |       2336        |       Yes        |
+|    |    |    +----+-------------------+------------------+
+|    |    |    | 11 |       2340        |       Yes        |
++----+----+----+----+-------------------+------------------+
+*2 Since it is not possible to distinguish between MODE1/MODE2/form1/form2, the
+number of transferred bytes will be set to that of form1.
+Yes : Performs error correction.
+No  : Does not perform error correction.
+ -  : Responds with a check condition.
+
+      12      4         8         2048      8    4          276
+   +------+-------+-----------+-----------+---+-----+-------------------+
+   |      |       |           |           |   |     | Error Correction  |
+   | SYNC | HEADER| SUBHEADER | USER DATA | 0 | EDC +---------+---------+
+   |      |       |           |           |   |     |    P    |    Q    |
+   +------+-------+-----------+-----------+---+-----+-------------------+
+                              |           |
+                              +-----------+
+   2048                       | USER DATA |
+                              +-----------+
+                              |           |
+                              +-----------+----------------+
+   2056                       | USER DATA |   Variable (8) |
+                              +-------------------------- -+
+                              |           |
+                              +-----------+-----------------------------+
+   2338                       | USER DATA |  Variable (288)             |
+                              +-----------+-----------------------------+
+                              |           |
+                              +-----------+----------------------------------+
+   2340                       | USER DATA |  Variable (292)                  |
+                              +-----------+----------------------------------+
+
+(6) Byte 09: Retry Count
+
+This specifies the number of retries (re-reading the target block) allowed
+when an error occurs.
+
+A maximum of 15 times can be specified, and a retry count of 0 means that
+retries are not allowed.
+
+Once a mode is set, it remains valid until the "MODE SELECT" command is
+issued again.
+
+The following shows the initial settings (or the settings when the parameter
+list length is 00H).
+
+Initial settings
+(1) XA/SH/EC/EJ
+    When DISC ID is other than 20H (CD-ROM XA)
+      XA=0, SH=0, EC=0, EJ=00
+    When DISC ID is 20H (CD-ROM XA)
+      XA=1, SH=1, EC=0, EJ=01
+      (For DISC ID, see the READ TOC command.)
+
+(2) Number of retries
+    15 times (0FH)
+
+
+The format and contents of the mode sense data are shown below.
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  |
+|Byte|     |     |     |     |     |     |     |     |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 00 |         Mode sense data length (=09H)         |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 01 |                 Media Type                    |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 02 |  WP |  0     0     0     0     0     0  |  0  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 03 |        Block Descriptor Length (=00H)         |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 04 |  XA |  SH |  0     0     0  |  EC |     EJ    |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 05 |  0     0     0     0     0     0     0     0  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 06 |  0     0     0     0     0     0     0     0  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 07 |  0     0     0     0     0     0     0     0  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 08 |  0     0     0     0     0     0     0     0  |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 09 |  0     0     0     0  |   Number of retries   |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+
+(1) Byte 00: Mode sense data length
+    =09H Indicates the length of data transferred after that.
+
+(2) Byte 01: Media type
+    =00H
+
+(3) Byte 02, Bit 7: WP
+    =1B Indicates that the media is write-protected.
+
+(4) Byte 03: Block descriptor length
+    =00H
+
+(5) Byte 04/09: See the "MODE SELECT" command.
+
+
+============================================
+
+Chapter 5 - Sense Data List
+---------------------------
+
+The contents of each status are explained below.
+
+(1) GOOD status (00000000B)
+This indicates that the command execution was completed successfully.
+
+(2) CHECK CONDITION status (00000010B)
+The "CHECK CONDITION" status is returned to the initiator if the following
+errors or abnormalities occur:
+  - If there is an error in the initiator's operation.
+  - If the command specified by the initiator cannot be executed.
+  - If the CD-ROM drive detects a hardware error.
+  - If an error occurs during command execution, causing execution to
+    terminate abnormally.
+
+The CD-ROM drive that returns the "CHECK CONDITION" status generates sense
+data describing the error.
+
+The initiator can receive the sense data and check the error by issuing the
+"REQUEST SENSE" command.
+
+(3) BUSY status (00001000B)
+The CD-ROM drive is in a BUSY state as shown below and cannot accept commands
+from the initiator.
+  -The CD-ROM drive is operating in response to a request from another
+   initiator.
+  -The CD-ROM drive is currently in a BUSY state due to a SEEK operation, etc.
+
+(4) RESERVATION CONFLICT Status (00011000B)
+This indicates that the CD-ROM drive has been reserved by another initiator
+and cannot be used until the reservation is released.
+
+
+5-1  Sense Data
+---------------
+
+The sense data indicates detailed error information related to the CD-ROM
+drive, and the sense data content is valid when the "CHECK CONDITION" status
+is returned.
+
+The initiator can read the sense data by issuing the "REQUEST SENSE" command.
+
+The sense data for CD-ROM drives is extended sense data (ERROR CLASS = 7), and
+the length of all sense data is 18 bytes.
+
+The format of the sense data (ERROR CLASS = 7, ERROR CODE = 0) is shown below.
+
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  |
+|Byte|     |     |     |     |     |     |     |     |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 00 |Valid|         Error Code (70H)                |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 01 |                  Reserved                     |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 02 |       Reserved        |      Sense Key        |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 03 |    (MSB)                                      |
++----+---------      Information Bytes      ---------+
+| 06 |    (LSB)                                      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 07 |          Actual Sense Length (0AH)            |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 08 | Reserved  |    Device ID    |    Reserved     |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 09 |  0  | Sub-error class |    Sub-error Code     |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 10 |                  Reserved                     |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 11 |                  Reserved                     |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 12 |  0  | Sub-error class |    Sub-error Code     |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 13 |    (MSB)                                      |
++----+---------           Reserved          ---------+
+| 17 |    (LSB)                                      |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+     Table 1. Structure of sense data
+
+The meaning of each parameter in the extended sense data is as follows.
+
+(1) Byte 00, Bit7: VALID
+When this bit is "1", the information shown in Bytes03 to 06 is valid.
+
+(2) Byte 02: SENSE KEY
+Indicates the cause of the error. For details, see "Table 2 SUB ERROR
+CLASS/CODE".
+
+(3) Bytes 03 - 06: INFORMATION BYTE
+Only when the VALID bit is 1, it indicates the address information where the
+error occurred. However, depending on the type of command that caused the
+error, one of the following three types of address information will be
+displayed.
+
+1) Logical Block Address
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  |
+|Byte|     |     |     |     |     |     |     |     |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 03 |         Logical Block Address (MSB)           |
++----+-----------------------------------------------+
+| 04 |         Logical Block Address                 |
++----+-----------------------------------------------+
+| 05 |         Logical Block Address                 |
++----+-----------------------------------------------+
+| 06 |         Logical Block Address (LSB)           |
++----+-----------------------------------------------+
+
+2) CD-ROM header address or CD subcode-Q address (absolute time)
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  |
+|Byte|     |     |     |     |     |     |     |     |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 03 |         Header/ATIME(MIN)                     |
++----+-----------------------------------------------+
+| 04 |         Header/ATIME(SEC)                     |
++----+-----------------------------------------------+
+| 05 |         Header/ATIME(BLOCK/FRAME)             |
++----+-----------------------------------------------+
+| 06 |  0     0     0     0     0     0     0     0  |
++----+-----------------------------------------------+
+
+3) TNO (song number)
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+|Bit |  7  |  6  |  5  |  4  |  3  |  2  |  1  |  0  |
+|Byte|     |     |     |     |     |     |     |     |
++----+-----+-----+-----+-----+-----+-----+-----+-----+
+| 03 |          TNO (Track Number)                   |
++----+-----------------------------------------------+
+| 04 |  0     0     0     0     0     0     0     0  |
++----+-----------------------------------------------+
+| 05 |  0     0     0     0     0     0     0     0  |
++----+-----------------------------------------------+
+| 06 |  0     0     0     0     0     0     0     0  |
++----+-----------------------------------------------+
+
+(4) Byte 07 ADDITIONAL SENSE LENGTH
+Indicates the number of bytes of the parameter that follows. Always 0AH.
+
+(5) Byte 08 Bit5-3: DEVICE ID
+Indicates the SCSI ID of the CD-ROM drive. Fixed to 010B.
+
+(6) Byte 09, Bit6-0: SUB ERROR CLASS/CODE
+Byte12, Bit6-0
+Code indicating detailed error information. Note that Bytes 09 and 12 are the
+same, but please refer to Byte 12 whenever possible.
+
+For details, please refer to "Table 2 SUB ERROR CLASS/CODE".
+
+
+5-2  Table 1 SENSE KEY
+----------------------
+
++-------+----------------+---------------------------------------------------+
+| SENSE |     Name       | Meaning                                           |
+|  KEY  |                |                                                   |
++-------+----------------+---------------------------------------------------+
+|  0H   | NO SENSE       |  This indicates that there is no specific SENSE   |
+|       |                |  KEY to be transferred. This occurs when the      |
+|       |                |  command preceding the "REQUEST SENSE" command is |
+|       |                |  successfully completed.                          |
++-------+----------------+---------------------------------------------------+
+|  1H   |                |  NOT USED                                         |
++-------+----------------+---------------------------------------------------+
+|  2H   | NOT READY      |  Indicates that the CD-ROM drive is not ready.    |
++-------+----------------+---------------------------------------------------+
+|  3H   | MEDIUM ERROR   |  This indicates that an error has occurred due to |
+|       |                |  a disk defect, etc.                              |
++-------+----------------+---------------------------------------------------+
+|  4H   | HARDWARE ERROR |  This message indicates that the CD-ROM drive     |
+|       |                |  detected an unrecoverable hardware error while   |
+|       |                |  executing a command or during a self-test.       |
++-------+----------------+---------------------------------------------------+
+|  5H   | ILLEGAL        | - There is an inappropriate value in the          |
+|       | REQUEST        |   parameters in the transferred CDB or in the     |
+|       |                |   parameters transferred by specifying a command. |
+|       |                | - The specified command cannot be executed.       |
+|       |                | - A logical unit number other than 000B was       |
+|       |                |   specified (for CD-ROM drives, the logical unit  |
+|       |                |   number is fixed at 000B because the controller  |
+|       |                |   and drive device are integrated).               |
++-------+----------------+---------------------------------------------------+
+|  6H   | UNIT ATTENTION |  Indicates that a disk change operation has been  |
+|       |                |  performed or the CD-ROM drive has been reset due |
+|       |                |  to a "BUS DEVICE RESET" message or RESE          |
+|       |                |  condition                                        |
++-------+----------------+---------------------------------------------------+
+|  7H   |                |  NOT USED                                         |
++-------+----------------+---------------------------------------------------+
+|  8H   |                |  NOT USED                                         |
++-------+----------------+---------------------------------------------------+
+|  9H   |                |  NOT USED                                         |
++-------+----------------+---------------------------------------------------+
+|  AH   |                |  NOT USED                                         |
++-------+----------------+---------------------------------------------------+
+|  BH   | ABORTED        |  This indicates that the CD-ROM drive has         |
+|       | COMMAND        |  abnormally terminated the command. The initiator |
+|       |                |  may attempt to recover by reissuing the command. |
++-------+----------------+---------------------------------------------------+
+|  CH   |                |  NOT USED                                         |
++-------+----------------+---------------------------------------------------+
+|  DH   |                |  NOT USED                                         |
++-------+----------------+---------------------------------------------------+
+|  EH   |                |  NOT USED                                         |
++-------+----------------+---------------------------------------------------+
+|  FH   |                |  Reserved                                         |
++-------+----------------+---------------------------------------------------+
+
+
+5-3  Table 2 SUB ERROR CLASS/CODE
+---------------------------------
+
++-------+------+-----------------+----------------------------------+--------+
+|SUB    |SUB   |     Name        | Meaning                          | SENSE  |
+|E-CLASS|E-CODE|                 |                                  |  KEY   |
++-------+------+-----------------+----------------------------------+--------+
+|       |      |                 |  It does not have a valid sense  |        |
+|       |  0H  | NO SENSE        |  byte, or the sense data does    |   0    |
+|       |      |                 |  not contain any error           |        |
+|       |      |                 |  information.                    |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  1H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  2H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  3H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  4H  | DRIVE NOT READY |  The CD-ROM drive is not READY.  |   2    |
++       +------+-----------------+----------------------------------+--------+
+|       |  5H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  6H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|  0H   |  7H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  8H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  9H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  AH  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  BH  | NO DISC         |  No disk is inserted.            |   2    |
++       +------+-----------------+----------------------------------+--------+
+|       |  CH  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  DH  | DISC EJECT      |  The disk cartridge is in the    |   2    |
+|       |      |                 |  ejected state.                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  EH  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  FH  |                 |                                  |        |
++-------+------+-----------------+----------------------------------+--------+
++-------+------+-----------------+----------------------------------+--------+
+|SUB    |SUB   |     Name        | Meaning                          | SENSE  |
+|E-CLASS|E-CODE|                 |                                  |  KEY   |
++-------+------+-----------------+----------------------------------+--------+
+|       |  0H  |                 |                                  |        |
++-------+------+-----------------+----------------------------------+--------+
+|       |  1H  | DATA FIELD      |  One or more uncorrectable       |   3    |
+|       |      | UNCORRECT       |  errors occurred in a block.     |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  2H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  3H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  4H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  5H  | SEEK ERROR      |  The seek operation does not     |   3    |
+|       |      |                 |  finish within the specified     |        |
+|       |      |                 |  time.                           |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  6H  | HEADER READ     |  The header address of the       |   3    |
+|       |      | ERROR           |  target block address cannot     |        |
+|       |      |                 |  be found.                       |        |
++       +------+-----------------+----------------------------------+--------+
+|  1H   |  7H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  8H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  9H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  AH  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  BH  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  CH  | NOT DIGITAL     |  The search target address of    |   3    |
+|       |      | AUDIO TRACK     |  the AUDIO TRACK SEARCH command  |        |
+|       |      |                 |  is the CD-ROM data area.        |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  DH  | NOT CD-ROM      |  The READ or SEEK target block   |   3    |
+|       |      | DATA TRACK      |  address of the READ, SEEK, READ |        |
+|       |      |                 |  EXTENDED, or SEEK EXTENDED      |        |
+|       |      |                 |  command is an AUDIO TRACK.      |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  EH  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  FH  |                 |                                  |        |
++-------+------+-----------------+----------------------------------+--------+
++-------+------+-----------------+----------------------------------+--------+
+|SUB    |SUB   |     Name        | Meaning                          | SENSE  |
+|E-CLASS|E-CODE|                 |                                  |  KEY   |
++-------+------+-----------------+----------------------------------+--------+
+|       |  0H  | INVALID COMMAND |  The CDB operation code is       |   5    |
+|       |      |                 |  invalid.                        |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  1H  | INVALID ADDRESS |  The block address or subcode-Q  |   5    |
+|       |      |                 |  address in the CDB is invalid.  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  2H  | INVALID         |  The parameters in the CDB are   |   5    |
+|       |      | PARAMETER       |  invalid.                        |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  3H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  4H  | INVALID COMMAND |  Commands were issued out of     |   5    |
+|       |      | SEQUENCE        |  order.                          |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  5H  | END OF VOLUME   |  The block address or subcode-Q  |   5    |
+|       |      |                 |  address to be accessed is       |        |
+|       |      |                 |  beyond the end of the disk.     |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  6H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|  2H   |  7H  | INVALID REQUEST |  Even though it was a top        |   5    |
+|       |      | IN CDB          |  loading type, an EJECT process  |        |
+|       |      |                 |  was required.                   |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  8H  | UNIT ATTENTION  |  The disk was replaced. However, |   6    |
+|       |      |                 |  it is not set immediately after |        |
+|       |      |                 |  RESET.                          |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  9H  | UNIT ATTENTION  |  POWER ON RESET or BUS was       |   6    |
+|       |      |                 |  RESET.                          |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  AH  | INVALID         |  The value in the parameter list |   5    |
+|       |      | PARAMETER LIST  |  received from the initiator in  |        |
+|       |      |                 |  response to a command is        |        |
+|       |      |                 |  invalid.                        |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  BH  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  CH  | NOT AUDIO       |  The current operating status of |   5    |
+|       |      | PLAY STATE      |  the CD-ROM drive is not playing |        |
+|       |      |                 |  an AUDIO TRACK.                 |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  DH  | INVALID MESSAGE |  An invalid message was received |   5    |
+|       |      |                 |  during the DATA IN/OUT phase.   |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  EH  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  FH  | INITIATOR'S ID  |  A RESERVE/RELEASE command was   |        |
+|       |      | UNDEFINED       |  issued without the initiator's  |        |
+|       |      |                 |  SCSI ID being notified during   |        |
+|       |      |                 |  the SELECTION phase.            |        |
++-------+------+-----------------+----------------------------------+--------+
++-------+------+-----------------+----------------------------------+--------+
+|SUB    |SUB   |     Name        | Meaning                          | SENSE  |
+|E-CLASS|E-CODE|                 |                                  |  KEY   |
++-------+------+-----------------+----------------------------------+--------+
+|       |  0H  | PARITY ERROR    |  A parity error was detected on  |   4    |
+|       |      |                 |  the data bus.                   |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  1H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  2H  | ABORT COMMAND   |  This indicates that the CD-ROM  |   B    |
+|       |      |                 |  drive terminated the command    |        |
+|       |      |                 |  abnormally.                     |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  3H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  4H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  5H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  6H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|  3H   |  7H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  8H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  9H  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  AH  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  BH  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  CH  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  DH  |                 |                                  |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  EH  | INTERFACE       |  The CD-ROM drive detected a     |   4    |
+|       |      | TIMEOUT         |  timeout during interface        |        |
+|       |      |                 |  processing.                     |        |
++       +------+-----------------+----------------------------------+--------+
+|       |  FH  |                 |                                  |        |
++-------+------+-----------------+----------------------------------+--------+
+
+
+============================================
+
+Copyright and registered trademarks
+-----------------------------------
+
+SCSICMD.TXT (hereinafter referred to as "this software") is a part of the
+software development tool for PC-FXGA.
+
+This software should not be used for any purpose other than software
+development for PC-FX and PC-FXGA.
+
+Hudson Corporation shall not be held responsible or liable for any direct or
+indirect damages resulting from the use of this software.
+
+Hudson Corporation will not directly answer questions about the operation
+method, technical content, or other questions about this software. Please
+refrain from contacting us.
+
+Please carefully read the "Software Terms of Use" before using this software.
+
+The copyright of this software is owned by Hudson Corporation.
+
+MS-DOS is a registered trademark of Microsoft Corporation in the United
+States.
+Other company and product names mentioned are registered trademarks or
+trademarks of their respective companies.
+
+
+                                                           (C)1996 HUDSON SOFT
