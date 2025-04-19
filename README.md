@@ -1,4 +1,5 @@
 # pcengine_scsi_sigrok_protocol_decoder
+
 Protocol decoder for sigrok/pulseview-based logic state analyzers for decoding SCSI data
 
 ## Introduction
@@ -38,7 +39,8 @@ An example is shown below (from an actual data capture):
 
 ### Not Implemented
 
-- SCSI Abort
+- SCSI Abort (i.e. transaction in progress)
+- SCSI Reset
 - Any Timing/timeout conditions (bus settling, timeouts, etc.)
 - Any other Protocol Errors
 
