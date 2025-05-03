@@ -14,6 +14,9 @@ The "specific tests" folder contains some deliberate tests which will probably n
 jbrandwood wrote a program to exercise the SCSI interface ("scsitest.pce", included), to test various scenarios.
 It works in concert with a PC Engine game disc which has a normal audio track as track 1.
 
+Source code for the scsitest program can be found here:
+[https://github.com/pce-devel/huc/tree/master/examples/asm/elmer/cd-core-scsitest](https://github.com/pce-devel/huc/tree/master/examples/asm/elmer/cd-core-scsitest)
+
 ### Test 6 (Read Data and Abort) & Test 7 (Read Data and Abort part 2):
 
 In these tests, the command is initiated, and the SEL signal is asserted in order to abort.
