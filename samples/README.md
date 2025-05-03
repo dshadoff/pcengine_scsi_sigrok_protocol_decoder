@@ -1,6 +1,6 @@
 # Samples
 
-Samples of the SCSI data from PC Engine CDROM, for use with the Protocol decoder (for sigrok/pulseview-based logic state analyzers)
+Samples of the SCSI data from PC Engine CDROM, for use with the Protocol decoder (for sigrok/pulseview-based logic state analyzers).
 
 ## Overview
 
@@ -41,7 +41,7 @@ This test is significant for several reasons:
 SEL is asserted.  Once SEL is asserted, the BSY signal goes high, and quickly goes low again,
 re-entering COMMAND phase in order to accept a new command.
 
-2. In order to exit the COMMAND pahse, the special command 0xFF (abort) is sent, and the SCSI
+2. In order to exit the COMMAND phase, the special command 0xFF (abort) is sent, and the SCSI
 bus enters into STAT_IN and MSG_IN phases quickly in order to close out the SCSI command.
 
 3. When the CD completes the original PLAY operation, the SCSI command re-enters into STAT_IN
