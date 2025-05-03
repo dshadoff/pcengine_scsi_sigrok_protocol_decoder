@@ -49,4 +49,11 @@ phase (BSY low, CD low, IO low, MSG high) in an attempt to close out the origina
 This seems unusual, but it seems like either (a) STAT and MSG codes must be comsumed, or (b) as in
 tests 8 and 9 above, the SEL can be asserted again, and the transaction will close automatically.
 
+### Abort During Command Phase:
 
+![Abort During Command Phase](img/Abort_during_Command_phase.jpg)
+
+
+### Unexpected Re-assert After Audio Playback Completion:
+
+![Unexpected SCSI Re-Engage after Song Completion](img/Unexpected_SCSI_Re-Engage.jpg)
