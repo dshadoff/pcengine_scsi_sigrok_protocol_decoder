@@ -219,6 +219,9 @@ def command_label(ctype):
         elif rdtype == 3:
             cmd_label = [ f"[DE]: READ TOC PARAMETER ({ctype[2]:02X})    [ 0x{ctype[0]:02X} 0x{ctype[1]:02X} 0x{ctype[2]:02X} 0x{ctype[3]:02X} 0x{ctype[4]:02X} 0x{ctype[5]:02X} 0x{ctype[6]:02X} 0x{ctype[7]:02X} 0x{ctype[8]:02X} 0x{ctype[9]:02X} ]" ]
 
+    elif (ctype[0] == 0xFF):            # FF = RESET Command
+            cmd_label = [ f"[FF]: ABORT    [ 0x{ctype[0]:02X} ]" ]
+
     else:                               # ALL OTHERS
         cmd_label = [ f"[{ctype[0]:02X}]: Unknown command  [ 0x{ctype[0]:02X} 0x{ctype[1]:02X} 0x{ctype[2]:02X} 0x{ctype[3]:02X} 0x{ctype[4]:02X} 0x{ctype[5]:02X} ]" ]
 
@@ -351,9 +354,7 @@ class Decoder(srd.Decoder):
     #    c) phase goes to BUS FREE
     # (need to add SCSI_RST as input)
     #
-    # 2) Currently, SCSI_ATN is not evaluated
-    #
-    # 3) No time values are currently evaluated (i.e. settling time or timeouts)
+    # 2) No time values are currently evaluated (i.e. settling time or timeouts)
     #
     def decode(self):
         if not self.samplerate:
@@ -362,28 +363,50 @@ class Decoder(srd.Decoder):
         while True:
             if self.state == 'BUS FREE':
                 # Wait for falling transition on channel 8 (scsi_sel), which starts arbitration/selection
-                self.wait({8: 'f'})
-                self.put(self.startsamplenum, self.samplenum, self.out_ann,
-                                 [0, ['Bus Free', 'Free', 'F']])
-                self.state = 'ARBITRATION'
+                (d0, d1, d2, d3, d4, d5, d6, d7, scsi_sel, scsi_bsy, scsi_cd, scsi_io, scsi_msg, scsi_ack) = self.wait([{8: 'f'}, {9: 'f'}])
+                pins = (d0, d1, d2, d3, d4, d5, d6, d7, scsi_sel, scsi_bsy, scsi_cd, scsi_io, scsi_msg, scsi_ack)
+                value = getluns(pins)
+
+                if (self.matched & (0b1 << 0)):         # SEL falling
+                    if (scsi_bsy == 0):
+                        self.put(self.startsamplenum, self.samplenum, self.out_ann,
+                                    [10, ['Busy', 'Busy', 'Bsy']])
+                    else:
+                        self.put(self.startsamplenum, self.samplenum, self.out_ann,
+                                    [0, ['Bus Free', 'Free', 'F']])
+                    self.state = 'ARBITRATION'
+
+                if (self.matched & (0b1 << 1)):         # BSY falling (such as at the end of an audio track with no active SCSI command)
+                    self.put(self.startsamplenum, self.samplenum, self.out_ann,
+                                [0, ['Bus Free', 'Free', 'F']])
+                    self.state = 'INFO XFER'
+                    self.startsamplenum = self.samplenum
+                    # set up for (potential) data captures
+                    self.datafound = 0
+                    self.datastartsample = self.samplenum
+                    # get values of cd, io, msg for subphase
+                    self.subphase = (scsi_msg << 2) + (scsi_cd << 1) + scsi_io
+                    self.phasestartsample = self.samplenum
+
                 self.startsamplenum = self.samplenum
 
 
             if self.state == 'ARBITRATION':
                 # Wait for falling transition on channel 9 (scsi_bsy), which completes arbitration
-                (d0, d1, d2, d3, d4, d5, d6, d7, scsi_sel, scsi_bsy, scsi_cd, scsi_io, scsi_msg, scsi_ack) = self.wait({9: 'f'})
+                # ALSO can be used for interrupting a command in process ("ABORT")
+                scsi_bsy_start = scsi_bsy
+                (d0, d1, d2, d3, d4, d5, d6, d7, scsi_sel, scsi_bsy, scsi_cd, scsi_io, scsi_msg, scsi_ack) = self.wait({9: 'e'})
                 pins = (d0, d1, d2, d3, d4, d5, d6, d7, scsi_sel, scsi_bsy, scsi_cd, scsi_io, scsi_msg, scsi_ack)
                 value = getluns(pins)
-#                self.put(self.startsamplenum, self.samplenum, self.out_ann,
-#                                 [1, ['Arbitration', 'Arb', 'A']])
-#                self.put(self.startsamplenum, self.samplenum, self.out_ann,
-#                                 [11, [value]])
-#                self.state = 'SELECT'
-#                self.startsamplenum = self.samplenum
-                self.put(self.startsamplenum, self.samplenum, self.out_ann,
-                                 [2, ['Selection', 'Sel', 'Se']])
-                self.put(self.startsamplenum, self.samplenum, self.out_ann,
-                                 [11, [value]])
+
+                if (scsi_bsy_start == 0):
+                    self.put(self.startsamplenum, self.samplenum, self.out_ann,
+                                     [10, ['Abort', 'Abort', 'Ab']])
+                else:
+                    self.put(self.startsamplenum, self.samplenum, self.out_ann,
+                                     [2, ['Selection', 'Sel', 'Se']])
+                    self.put(self.startsamplenum, self.samplenum, self.out_ann,
+                                     [11, [value]])
                 self.state = 'INFO XFER'
                 self.startsamplenum = self.samplenum
                 # set up for (potential) data captures
@@ -393,31 +416,13 @@ class Decoder(srd.Decoder):
                 self.subphase = (scsi_msg << 2) + (scsi_cd << 1) + scsi_io
                 self.phasestartsample = self.samplenum
 
-#            if self.state == 'SELECT':
-#                # Wait for rising transition on channel 8 (scsi_sel), which completed selection
-#                (d0, d1, d2, d3, d4, d5, d6, d7, scsi_sel, scsi_bsy, scsi_cd, scsi_io, scsi_msg, scsi_ack) = self.wait({8: 'r'})
-#                value = getluns(pins)
-#                self.put(self.startsamplenum, self.samplenum, self.out_ann,
-#                                 [2, ['Selection', 'Sel', 'Se']])
-#                self.put(self.startsamplenum, self.samplenum, self.out_ann,
-#                                 [11, [value]])
-#                self.state = 'INFO XFER'
-#                self.startsamplenum = self.samplenum
-#                # set up for (potential) data captures
-#                self.datafound = 0
-#                self.datastartsample = self.samplenum
-#                # get values of cd, io, msg for subphase
-#                self.subphase = (scsi_msg << 2) + (scsi_cd << 1) + scsi_io
-#                self.phasestartsample = self.samplenum
-
-
             if self.state == 'INFO XFER':
                 # Within Command, three signals are most important: SCSI_MSG, SCSI_CD and SCSI_IO
                 # SCSI_CD = Command (when low), Data (when High)
                 # SCSI_IO = Input (when low), Output (when High)
                 #
                 # Wait for rising transition on channel 9 (scsi_bsy), which completes transaction
-                (d0, d1, d2, d3, d4, d5, d6, d7, scsi_sel, scsi_bsy, scsi_cd, scsi_io, scsi_msg, scsi_ack) = self.wait([{10: 'e'}, {11: 'e'}, {12: 'e'}, {13: 'e'}, {9: 'h'}])
+                (d0, d1, d2, d3, d4, d5, d6, d7, scsi_sel, scsi_bsy, scsi_cd, scsi_io, scsi_msg, scsi_ack) = self.wait([{10: 'e'}, {11: 'e'}, {12: 'e'}, {13: 'e'}, {9: 'h'}, {8: 'l'}])
 
                 pins = (d0, d1, d2, d3, d4, d5, d6, d7, scsi_sel, scsi_bsy, scsi_cd, scsi_io, scsi_msg, scsi_ack)
 
@@ -428,30 +433,34 @@ class Decoder(srd.Decoder):
                 while (double_check == 1):
 
                     end_subphase = 0
-                    (ch0, ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, ch9, ch10, ch11, ch12, ch13) = self.wait([{10: 'e'}, {11: 'e'}, {12: 'e'}, {13: 'e'}, {9: 'e'}, {'skip': 1}])
+                    (ch0, ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, ch9, ch10, ch11, ch12, ch13) = self.wait([{10: 'e'}, {11: 'e'}, {12: 'e'}, {13: 'e'}, {9: 'e'}, {8: 'e'}, {'skip': 1}])
 
-                    if ((self.matched & 0b11111) == 0):             # if nothing triggered except the 'skip' message (critical lines didn't toggle)
+                    if ((self.matched & 0b111111) == 0):             # if nothing triggered except the 'skip' message (critical lines didn't toggle)
                         double_check = 0
 
-                    if ((self.match_criteria & (0b1 << 0)) and (self.matched & (0b1 << 0))):        # They should cancel each other out
-                        self.match_criteria = (self.match_criteria & 0b111110)
-                        self.matched        = (self.matched & 0b111110)
+                    if ((self.match_criteria & (0b1 << 0)) and (self.matched & (0b1 << 0))):        # They should cancel each other out (CD)
+                        self.match_criteria = (self.match_criteria & 0b1111110)
+                        self.matched        = (self.matched & 0b1111110)
 
-                    if ((self.match_criteria & (0b1 << 1)) and (self.matched & (0b1 << 1))):        # They should cancel each other out
-                        self.match_criteria = (self.match_criteria & 0b111101)
-                        self.matched        = (self.matched & 0b111101)
+                    if ((self.match_criteria & (0b1 << 1)) and (self.matched & (0b1 << 1))):        # They should cancel each other out (IO)
+                        self.match_criteria = (self.match_criteria & 0b1111101)
+                        self.matched        = (self.matched & 0b1111101)
 
-                    if ((self.match_criteria & (0b1 << 2)) and (self.matched & (0b1 << 2))):        # They should cancel each other out
-                        self.match_criteria = (self.match_criteria & 0b111011)
-                        self.matched        = (self.matched & 0b111011)
+                    if ((self.match_criteria & (0b1 << 2)) and (self.matched & (0b1 << 2))):        # They should cancel each other out (MSG)
+                        self.match_criteria = (self.match_criteria & 0b1111011)
+                        self.matched        = (self.matched & 0b1111011)
 
-                    if ((self.match_criteria & (0b1 << 3)) and (self.matched & (0b1 << 3))):        # They should cancel each other out
-                        self.match_criteria = (self.match_criteria & 0b110111)
-                        self.matched        = (self.matched & 0b110111)
+                    if ((self.match_criteria & (0b1 << 3)) and (self.matched & (0b1 << 3))):        # They should cancel each other out (ACK)
+                        self.match_criteria = (self.match_criteria & 0b1110111)
+                        self.matched        = (self.matched & 0b1110111)
 
-                    if ((self.match_criteria & (0b1 << 4)) and (self.matched & (0b1 << 4))):        # They should cancel each other out
-                        self.match_criteria = (self.match_criteria & 0b101111)
-                        self.matched        = (self.matched & 0b101111)
+                    if ((self.match_criteria & (0b1 << 4)) and (self.matched & (0b1 << 4))):        # They should cancel each other out (BSY)
+                        self.match_criteria = (self.match_criteria & 0b1101111)
+                        self.matched        = (self.matched & 0b1101111)
+
+                    if ((self.match_criteria & (0b1 << 5)) and (self.matched & (0b1 << 5))):        # They should cancel each other out (SEL)
+                        self.match_criteria = (self.match_criteria & 0b1011111)
+                        self.matched        = (self.matched & 0b1011111)
 
                     if ((self.match_criteria & (0b1 << 0)) and not (self.matched & (0b1 << 0))):    # triggered on first wait, and confirmed as 'not a glitch'
                         end_subphase = 1
@@ -494,6 +503,14 @@ class Decoder(srd.Decoder):
                         self.put(self.startsamplenum, self.samplenum, self.out_ann,
                                          [4, ['Information Transfer', 'Info Xfer', 'Inf']])
                         self.state = 'BUS FREE'
+                        self.startsamplenum = self.samplenum
+                        end_subphase = 1
+
+                    # Low SEL means end of Information Transfer phase & into ABORT
+                    if ((self.match_criteria & (0b1 << 5)) and not (self.matched & (0b1 << 5))):
+                        self.put(self.startsamplenum, self.samplenum, self.out_ann,
+                                         [4, ['Information Transfer', 'Info Xfer', 'Inf']])
+                        self.state = 'ARBITRATION'
                         self.startsamplenum = self.samplenum
                         end_subphase = 1
 

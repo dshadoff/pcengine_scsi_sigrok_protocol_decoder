@@ -39,7 +39,6 @@ An example is shown below (from an actual data capture):
 
 ### Not Implemented
 
-- SCSI Abort (i.e. transaction in progress)
 - SCSI Reset
 - Any Timing/timeout conditions (bus settling, timeouts, etc.)
 - Any other Protocol Errors
