@@ -51,7 +51,7 @@ tests 8 and 9 above, the SEL can be asserted again, and the transaction will clo
 
 ### Abort During Command Phase:
 
-![Abort During Command Phase](../img/Abort_during_Command_phase.jpg)
+![Abort During Command Phase](../img/Abort_During_Command_Phase.jpg)
 
 
 ### Unexpected Re-assert After Audio Playback Completion:
